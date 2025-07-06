@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: todo-backend
+    env: node
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+    healthCheckPath: /api/health
+
+  - type: web
+    name: todo-frontend
+    env: static
+    buildCommand: cd ../frontend && npm install && npm run build
+    staticPublishPath: ../frontend/build
+    envVars:
+      - key: REACT_APP_API_URL
+        value: https://todo-backend.onrender.com/api
